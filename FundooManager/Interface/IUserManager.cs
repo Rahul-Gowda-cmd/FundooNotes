@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FundooManager.Interface
 {
+
     public interface IUserManager
     {
         string Register(UserModel user);

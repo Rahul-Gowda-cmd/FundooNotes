@@ -10,6 +10,7 @@ namespace FundooRepository.Migrations
     [DbContext(typeof(UserContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
+
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

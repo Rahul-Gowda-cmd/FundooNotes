@@ -7,6 +7,7 @@ namespace FundooModels
 {
     public class UserModel
     {
+
         [Key]
         public int UserId { get; set; }
 

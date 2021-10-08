@@ -21,6 +21,6 @@ namespace FundooNotes
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+        }       );
     }
 }
