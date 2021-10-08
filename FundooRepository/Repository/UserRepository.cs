@@ -16,11 +16,7 @@ namespace FundooRepository.Repository
             this.userContext = userContext;
         }
 
-        public string Login(LoginModel userlogin)
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public string Register(UserModel user)
         {
             try
@@ -33,6 +29,11 @@ namespace FundooRepository.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public string Login(LoginModel userlogin)
+        {
+            throw new NotImplementedException();
         }
     }
 }
