@@ -7,7 +7,6 @@ namespace FundooModels
 {
     public class LoginModel
     {
-
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
 
