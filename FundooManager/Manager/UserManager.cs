@@ -16,6 +16,18 @@ namespace FundooManager.Manager
             this.repository = repository;
         }
 
+        public string Register(UserModel user)
+        {
+            try
+            {
+                return this.repository.Register(user) ;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public string Login(LoginModel userlogin)
         {
             try
@@ -28,12 +40,24 @@ namespace FundooManager.Manager
             }
         }
 
-
-        public string Register(UserModel user)
+        public string ForgotPassword(ForgotPasswordModel forgotpassword)
         {
             try
             {
-                return this.repository.Register(user) ;
+                return this.repository.ForgotPassword(forgotpassword);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public string ResetPassword(ResetPasswordModel resetpassword)
+        {
+            try
+            {
+                return this.repository.ResetPassword(resetpassword);
             }
             catch (Exception ex)
             {

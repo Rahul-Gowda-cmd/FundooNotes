@@ -13,5 +13,6 @@ namespace FundooRepository.Context
 
         }
         public DbSet<UserModel> Users { get; set; }
+
     }
 }

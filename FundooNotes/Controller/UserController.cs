@@ -42,18 +42,70 @@ namespace FundooNotes.Controller
 
 
         [HttpPost]
-        [Route("login")]
+        [Route("api/login")]
         public IActionResult Login([FromBody] LoginModel userlogin)
         {
             try
             {
-                string message = this.manager.Login(userlogin);
-                return this.Ok(message);
+                string resultMessage = this.manager.Login(userlogin);
+                if (resultMessage.Equals("Login Successfull"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
+
+        [HttpPost]
+        [Route("api/ForgetPassword")]
+        public IActionResult ForgotPassword([FromBody] ForgotPasswordModel forgotpassword)
+        {
+            try
+            {
+                string resultMessage = this.manager.ForgotPassword(forgotpassword);
+                if (resultMessage.Equals("Password reset link has been sent to your email id"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/resetpassword")]
+        public IActionResult ResetPassword([FromBody] ResetPasswordModel resetpassword)
+        {
+            try
+            {
+                string message = this.manager.ResetPassword(resetpassword);
+                if (message.Equals("Password Reset Successfull"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = message });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
     }
 }
