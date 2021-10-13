@@ -1,5 +1,8 @@
 ﻿using FundooManager.Interface;
 using FundooModels;
+using FundooRepository.Context;
+using FundooRepository.Interface;
+using FundooRepository.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,18 +16,24 @@ namespace FundooNotes.Controller
     {
         private readonly IUserManager manager;
 
-        public UserController(IUserManager manager)
+        private readonly IUserRepository repository;
+        private readonly UserContext userContext;
+
+
+        public UserController(IUserManager manager, IUserRepository repository, UserContext userContext)
         {
             this.manager = manager;
+            this.repository = repository;
+            this.userContext = userContext;
         }
 
         [HttpPost]
         [Route("api/register")]
-        public IActionResult Register([FromBody] UserModel user)
+        public async Task<IActionResult> Register([FromBody] UserModel user)
         {
             try
             {
-                string resultMessage = this.manager.Register(user);
+                string resultMessage = await this.manager.Register(user);
                 if (resultMessage.Equals("Registration Successfull"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
@@ -50,7 +59,14 @@ namespace FundooNotes.Controller
                 string resultMessage = this.manager.Login(userlogin);
                 if (resultMessage.Equals("Login Successfull"))
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                    var user = this.userContext.Users.SingleOrDefault(x => x.Email == userlogin.Email);
+                    user.Password = null;
+                    string tokenString = this.repository.GenerateToken(userlogin.Email);
+                    return this.Ok(new { Status = true, Message = resultMessage, Data = user, tokenString });
+                }
+                else if(resultMessage.Equals("Wrong Password"))
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
                 else
                 {
@@ -65,14 +81,14 @@ namespace FundooNotes.Controller
 
         [HttpPost]
         [Route("api/ForgetPassword")]
-        public IActionResult ForgotPassword([FromBody] ForgotPasswordModel forgotpassword)
+        public IActionResult ForgotPassword(string email)
         {
             try
             {
-                string resultMessage = this.manager.ForgotPassword(forgotpassword);
-                if (resultMessage.Equals("Password reset link has been sent to your email id"))
+                string resultMessage = this.manager.ForgotPassword(email);
+                if (resultMessage.Equals("Check your Email"))
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage});
                 }
                 else
                 {
@@ -87,11 +103,11 @@ namespace FundooNotes.Controller
 
         [HttpPut]
         [Route("api/resetpassword")]
-        public IActionResult ResetPassword([FromBody] ResetPasswordModel resetpassword)
+        public async Task<IActionResult> ResetPassword([FromBody] UserModel resetpassword)
         {
             try
             {
-                string message = this.manager.ResetPassword(resetpassword);
+                string message =await this.manager.ResetPassword(resetpassword);
                 if (message.Equals("Password Reset Successfull"))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = message });

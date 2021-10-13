@@ -4,6 +4,7 @@ using FundooRepository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooManager.Manager
 {
@@ -16,7 +17,7 @@ namespace FundooManager.Manager
             this.repository = repository;
         }
 
-        public string Register(UserModel user)
+        public Task<string> Register(UserModel user)
         {
             try
             {
@@ -40,11 +41,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public string ForgotPassword(ForgotPasswordModel forgotpassword)
+        public string ForgotPassword(string email)
         {
             try
             {
-                return this.repository.ForgotPassword(forgotpassword);
+                return this.repository.ForgotPassword(email);
             }
             catch (Exception ex)
             {
@@ -53,7 +54,7 @@ namespace FundooManager.Manager
         }
 
 
-        public string ResetPassword(ResetPasswordModel resetpassword)
+        public Task<string> ResetPassword(UserModel resetpassword)
         {
             try
             {

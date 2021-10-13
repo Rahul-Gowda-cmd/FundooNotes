@@ -1,11 +1,17 @@
-﻿using FundooModels;
+﻿using Experimental.System.Messaging;
+using FundooModels;
 using FundooRepository.Context;
 using FundooRepository.Interface;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -13,18 +19,21 @@ namespace FundooRepository.Repository
     {
         private readonly UserContext userContext;
 
-        public UserRepository(UserContext userContext)
+        private readonly IConfiguration configuration;
+        public UserRepository(UserContext userContext, IConfiguration configuration)
         {
             this.userContext = userContext;
+            this.configuration = configuration;
         }
 
 
-        public string Register(UserModel user)
+        public async Task<string> Register(UserModel user)
         {
             try
             {
+                user.Password = EncryptData(user.Password);
                 this.userContext.Users.Add(user);
-                this.userContext.SaveChanges();
+                await this.userContext.SaveChangesAsync();
                 return "Registration Successfull";
             }
             catch (ArgumentNullException ex)
@@ -33,31 +42,37 @@ namespace FundooRepository.Repository
             }
         }
 
+        public static string EncryptData(string password)
+        {
+            string strmsg = string.Empty;
+            byte[] encode = new byte[password.Length];
+            encode = Encoding.UTF8.GetBytes(password);
+            strmsg = Convert.ToBase64String(encode);
+            return strmsg;
+        }
 
         public string Login(LoginModel userlogin)
         {
             try
             {
-                var UserEmailcheck = this.userContext.Users
-                 .Where(x => x.Email == userlogin.Email
-                 && x.Password == userlogin.Password).ToList();
+                var user = this.userContext.Users
+                 .SingleOrDefault(x => x.Email == userlogin.Email);
 
-                //this.userContext.Users.FirstOrDefault(x =>
-                //x.Email == userlogin.Email 
-                //&& x.Password == userlogin.Password);
-
-                int userId = 0;
-                foreach (var userData in UserEmailcheck)
+                if (user != null)
                 {
-                    userId = userData.UserId;
-                }
-                if (userId > 0)
-                {
-                    return "Login Successfull";
+                    userlogin.Password = EncryptData(userlogin.Password);
+                    if (user.Password == userlogin.Password)
+                    {
+                        return "Login Successfull";
+                    }
+                    else
+                    {
+                        return "Wrong Password";
+                    }
                 }
                 else
                 {
-                    return "Register new  EmailId";
+                    return "Register your Email";
                 }
             }
             catch (ArgumentNullException ex)
@@ -66,34 +81,37 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string ForgotPassword(ForgotPasswordModel forgotpassword)
+        public string ForgotPassword(string email)
         {
             try
             {
-                var users = this.userContext.Users.Any(x => x.Email == forgotpassword.Email);
-
+                var users = this.userContext.Users.Any(x => x.Email == email);
                 if (users)
                 {
-                    MailMessage mail = new MailMessage();
-                    SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                    MessageQueue msgqueue;
+                    if (MessageQueue.Exists(@".\Private$\MyQueue"))
+                    {
+                        msgqueue = new MessageQueue(@".\Private$\MyQueue");
+                    }
+                    else
+                    {
+                        msgqueue = MessageQueue.Create(@".\Private$\MyQueue");
+                    }
+                    Message message = new Message();
 
-                    mail.From = new MailAddress("Rahul.prabu.07@gmail.com");
-                    mail.To.Add("Rahul.prabu.07@gmail.com");
-                    mail.Subject = "Test Mail";
-                    mail.Body = "This is for testing SMTP mail from GMAIL";
+                    message.Formatter = new BinaryMessageFormatter();
+                    message.Body = "This is for testing SMTP mail from GMAIL";
 
-                    SmtpServer.Port = 587;
-                    SmtpServer.UseDefaultCredentials = false;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential("Username", "Password");
-                    SmtpServer.EnableSsl = true;
-
-                    SmtpServer.Send(mail);
-                    return "Password reset link has been sent to your email id";
+                    msgqueue.Label = "Mail";
+                    msgqueue.Send(message);
+                    SendEmail(email);
+                    return "Check your Email";
                 }
                 else
                 {
                     return "User Doesn't Exist";
                 }
+
             }
             catch (ArgumentException ex)
             {
@@ -101,7 +119,39 @@ namespace FundooRepository.Repository
             }
         }
 
-        public string ResetPassword(ResetPasswordModel resetpassword)
+        public async static void SendEmail(string Email)
+        {
+            MessageQueue msgqueue;
+            if (MessageQueue.Exists(@".\Private$\MyQueue"))
+            {
+                msgqueue = new MessageQueue(@".\Private$\MyQueue");
+            }
+            else
+            {
+                msgqueue = MessageQueue.Create(@".\Private$\MyQueue");
+            }
+
+            //// for reading message from MSMQ
+            var receivequeue = new MessageQueue(@".\Private$\MyQueue");
+            var receivemsg = receivequeue.Receive();
+            receivemsg.Formatter = new BinaryMessageFormatter();
+
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            mail.Body = receivemsg.Body.ToString();
+
+            mail.From = new MailAddress("Rahul.prabu.07@gmail.com");
+            mail.To.Add("Rahul.prabu.07@gmail.com");
+            mail.Subject = "Test Mail";
+
+            SmtpServer.Port = 587;
+            SmtpServer.UseDefaultCredentials = true;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("Rahul.prabu.07@gmail.com", "Password");
+            SmtpServer.EnableSsl = true;
+            await SmtpServer.SendMailAsync(mail);
+        }
+
+        public async Task<string> ResetPassword(UserModel resetpassword)
         {
             try
             {
@@ -109,9 +159,10 @@ namespace FundooRepository.Repository
 
                 if (users)
                 {
-                    var user = this.userContext.Users.Where(x => x.Email == resetpassword.Email).FirstOrDefault();
-                    user.Password = resetpassword.Password;
-                    this.userContext.SaveChanges();
+                    var user = this.userContext.Users.Where(x =>
+                    x.Email == resetpassword.Email).FirstOrDefault();
+                    user.Password = EncryptData(resetpassword.Password);
+                    await this.userContext.SaveChangesAsync();
                     return "Password Reset Successfull";
                 }
                 else
@@ -123,6 +174,33 @@ namespace FundooRepository.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public string GenerateToken(string Email)
+        {
+            byte[] key = Convert.FromBase64String(this.configuration["SecretKey"]);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                new Claim(ClaimTypes.Name, Email)
+            }),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
+            };
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
+            return handler.WriteToken(token);
+
+            //var token = new JwtSecurityToken(
+            //claims: new Claim[]
+            //{
+            //    new Claim(ClaimTypes.Name,useremail)
+            //},
+            //notBefore: new DateTimeOffset(DateTime.Now).DateTime,
+            //expires: new DateTimeOffset(DateTime.Now.AddMinutes(30)).DateTime,
+            //signingCredentials: new SigningCredentials(SecretKey, SecurityAlgorithms.HmacSha256)
+            //);
+            //return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
