@@ -42,7 +42,6 @@ namespace FundooRepository.Repository
                 throw new Exception(ex.Message);
             }
         }
-
         public static string EncryptData(string password)
         {
             string strmsg = string.Empty;
