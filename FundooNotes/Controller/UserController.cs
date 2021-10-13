@@ -4,6 +4,7 @@ using FundooRepository.Context;
 using FundooRepository.Interface;
 using FundooRepository.Repository;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,11 @@ namespace FundooNotes.Controller
         private readonly IUserManager manager;
 
         private readonly IUserRepository repository;
-        private readonly UserContext userContext;
-
-
-        public UserController(IUserManager manager, IUserRepository repository, UserContext userContext)
+        
+        public UserController(IUserManager manager, IUserRepository repository)
         {
             this.manager = manager;
             this.repository = repository;
-            this.userContext = userContext;
         }
 
         [HttpPost]
@@ -59,12 +57,25 @@ namespace FundooNotes.Controller
                 string resultMessage = this.manager.Login(userlogin);
                 if (resultMessage.Equals("Login Successfull"))
                 {
-                    var user = this.userContext.Users.SingleOrDefault(x => x.Email == userlogin.Email);
-                    user.Password = null;
+                    ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase database = connectionMultiplexer.GetDatabase();
+                    string firstname = database.StringGet("FirstName");
+                    string lastname = database.StringGet("LastName");
+                    int userId = Convert.ToInt32(database.StringGet("UserId"));
+
+                    UserModel user = new UserModel
+                    {
+                        FirstName = firstname,
+                        LastName = lastname,
+                        UserId = userId,
+                        Email = userlogin.Email
+                    };
+                    //    var user = this.userContext.Users.SingleOrDefault(x => x.Email == userlogin.Email);
+                    //    user.Password = null;
                     string tokenString = this.repository.GenerateToken(userlogin.Email);
                     return this.Ok(new { Status = true, Message = resultMessage, Data = user, tokenString });
                 }
-                else if(resultMessage.Equals("Wrong Password"))
+                else if (resultMessage.Equals("Wrong Password"))
                 {
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
@@ -72,6 +83,7 @@ namespace FundooNotes.Controller
                 {
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
+            
             }
             catch (Exception ex)
             {

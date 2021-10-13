@@ -4,6 +4,7 @@ using FundooRepository.Context;
 using FundooRepository.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -60,6 +61,11 @@ namespace FundooRepository.Repository
 
                 if (user != null)
                 {
+                    ConnectionMultiplexer connectionmultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase database = connectionmultiplexer.GetDatabase();
+                    database.StringSet(key: "FirstName", user.FirstName);
+                    database.StringSet(key: "LastName", user.LastName);
+                    database.StringSet(key: "userId", user.UserId.ToString());
                     userlogin.Password = EncryptData(userlogin.Password);
                     if (user.Password == userlogin.Password)
                     {
