@@ -17,12 +17,10 @@ namespace FundooNotes.Controller
     {
         private readonly IUserManager manager;
 
-        private readonly IUserRepository repository;
-        
-        public UserController(IUserManager manager, IUserRepository repository)
+        public UserController(IUserManager manager)
         {
             this.manager = manager;
-            this.repository = repository;
+            
         }
 
         [HttpPost]
