@@ -72,7 +72,7 @@ namespace FundooNotes.Controller
                     };
                     //    var user = this.userContext.Users.SingleOrDefault(x => x.Email == userlogin.Email);
                     //    user.Password = null;
-                    string tokenString = this.repository.GenerateToken(userlogin.Email);
+                    string tokenString = this.manager.GenerateToken(userlogin.Email);
                     return this.Ok(new { Status = true, Message = resultMessage, Data = user, tokenString });
                 }
                 else if (resultMessage.Equals("Wrong Password"))
