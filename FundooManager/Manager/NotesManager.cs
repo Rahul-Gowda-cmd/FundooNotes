@@ -17,7 +17,7 @@ namespace FundooManager.Manager
             this.notesrepositary = notesrepositary;
         }
 
-        public string AddNotes(NotesModel note)
+        public Task<string> AddNotes(NotesModel note)
         {
             try
             {
@@ -29,11 +29,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public bool DeleteNote(int UserID, int noteID)
+        public Task<bool> NotetoTrash(int noteID)
         {
             try
             {
-                bool result= notesrepositary.DeleteNote(UserID, noteID);
+                var result= notesrepositary.NotetoTrash(noteID);
                 return result;
             }
             catch (Exception ex)
@@ -55,11 +55,143 @@ namespace FundooManager.Manager
             }
         }
 
-        public string UpdateNote(NotesModel updateNote, int NotesID)
+        public Task<string> UpdateNote(NotesModel updatenotes)
         {
             try
             {
-                return this.notesrepositary.UpdateNote(updateNote, NotesID);
+                return this.notesrepositary.UpdateNote(updatenotes);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> Delete(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.Delete(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> RestoreNote(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.RestoreNote(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<NotesModel> GetArchive(int userId)
+        {
+            try
+            {
+                return this.notesrepositary.GetArchive(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<NotesModel> GetTrash(int userId)
+        {
+            try
+            {
+                return this.notesrepositary.GetArchive(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> PinNote(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.PinNote(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> UnPinNote(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.UnPinNote(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> ArchiveNote(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.ArchiveNote(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> UnArchiveNote(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.UnArchiveNote(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> SetRemainder(int noteId, string Time)
+        {
+            try
+            {
+                return this.notesrepositary.SetRemainder(noteId,Time);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> RemoveRemainder(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.RemoveRemainder(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> AddColor(int noteId, string color)
+        {
+            try
+            {
+                return this.notesrepositary.AddColor(noteId,color);
             }
             catch (Exception ex)
             {

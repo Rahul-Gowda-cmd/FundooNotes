@@ -8,9 +8,25 @@ namespace FundooRepository.Interface
 {
     public interface INotesRepositary
     {
-        string AddNotes(NotesModel note);
+        Task<string> AddNotes(NotesModel notes);
         List<NotesModel> GetNotes(int userId);
-        string UpdateNote(NotesModel updateNote, int NotesID);
-        bool DeleteNote(int UserID, int noteID);
+        Task<string> UpdateNote(NotesModel updateNote);
+        Task<bool> NotetoTrash(int noteID);
+        Task<string> Delete(int noteId);
+        Task<string> RestoreNote(int noteId);
+        List<NotesModel> GetArchive(int userId);
+        List<NotesModel> GetTrash(int userId);
+
+        Task<string> PinNote(int noteId);
+        Task<string> UnPinNote(int noteId);
+
+        Task<string> ArchiveNote(int noteId);
+        Task<string> UnArchiveNote(int noteId);
+
+        Task<string> SetRemainder(int noteId, string Time);
+        Task<string> RemoveRemainder(int noteId);
+
+        Task<string> AddColor(int noteId, string color);
+
     }
 }
