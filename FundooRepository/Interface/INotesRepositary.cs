@@ -11,9 +11,9 @@ namespace FundooRepository.Interface
         Task<string> AddNotes(NotesModel notes);
         List<NotesModel> GetNotes(int userId);
         Task<string> UpdateNote(NotesModel updateNote);
-        Task<bool> NotetoTrash(int noteID);
-        Task<string> Delete(int noteId);
+        Task<bool> Deletenote(int noteID);
         Task<string> RestoreNote(int noteId);
+
         List<NotesModel> GetArchive(int userId);
         List<NotesModel> GetTrash(int userId);
 

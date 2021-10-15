@@ -87,19 +87,18 @@ namespace FundooNotes.Controller
 
         [HttpPost]
         [Route("api/Deletenote")]
-        public async Task<IActionResult> NotetoTrash(int notesId)
+        public async Task<IActionResult> Deletenote(int notesId)
         {
             try
-            {
-                
-                bool resultMessage = await this.notesManager.NotetoTrash(notesId);
+            {               
+                bool resultMessage = await this.notesManager.Deletenote(notesId);
                 if (resultMessage)
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Deleted " });
                 }
-                else
+                else 
                 {
-                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id" });
                 }
             }
             catch (Exception ex)
@@ -108,212 +107,229 @@ namespace FundooNotes.Controller
             }
         }
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+        [HttpPost]
+        [Route("api/RestoreNote")]
+        public async Task<IActionResult> RestoreNote(int notesId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.RestoreNote(notesId);
+                if (resultMessage == ("Notes is restored"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpGet]
+        [Route("api/GetArchive")]
+        public IActionResult GetArchive(int notesId)
+        {
+            try
+            {
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+                List<NotesModel> resultMessage = this.notesManager.GetArchive(notesId);
+                if (resultMessage != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Get Archive", Data = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Archive Not Found", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpGet]
+        [Route("api/GetTrash")]
+        public IActionResult GetTrash(int userId)
+        {
+            try
+            {
+                List<NotesModel> resultMessage = this.notesManager.GetTrash(userId);
+                if (resultMessage != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Get Trash", Data = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Trash Not Found", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/PinNote")]
+        public async Task<IActionResult> PinNote(int notesId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.PinNote(notesId);
+                if (resultMessage == ("Pin Notes"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+        [HttpPost]
+        [Route("api/UnPinNote")]
+        public async Task<IActionResult> UnPinNote(int notesId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.UnPinNote(notesId);
+                if (resultMessage == ("UnPin the Notes"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/ArchiveNote")]
+        public async Task<IActionResult> ArchiveNote(int notesId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.ArchiveNote(notesId);
+                if (resultMessage == ("Archive Note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+        [HttpPost]
+        [Route("api/UnArchiveNote")]
+        public async Task<IActionResult> UnArchiveNote(int notesId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.UnArchiveNote(notesId);
+                if (resultMessage == ("UnArchived Note"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/SetRemainder")]
+        public async Task<IActionResult> SetRemainder(int notesId, string Time)
+        {
+            try
+            {
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+                string resultMessage = await this.notesManager.SetRemainder(notesId, Time);
+                if (resultMessage == ("Reminder is sets Successfuly"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/RemoveRemainder")]
+        public async Task<IActionResult> RemoveRemainder(int notesId)
+        {
+            try
+            {
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
+                string resultMessage = await this.notesManager.RemoveRemainder(notesId);
+                if (resultMessage == ("Reminder is removed"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
 
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/AddColor")]
+        public async Task<IActionResult> AddColor(int notesId, string color)
+        {
+            try
+            {
 
-        //[HttpPost]
-        //[Route("api/Deletenote")]
-        //public async Task<IActionResult> NotetoTrash(int notesId)
-        //{
-        //    try
-        //    {
-
-        //        bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //        if (resultMessage)
-        //        {
-        //            return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //    }
-        //}
-
-        //    [HttpPost]
-        //    [Route("api/Deletenote")]
-        //    public async Task<IActionResult> NotetoTrash(int notesId)
-        //    {
-        //        try
-        //        {
-
-        //            bool resultMessage = await this.notesManager.NotetoTrash(notesId);
-        //            if (resultMessage)
-        //            {
-        //                return this.Ok(new ResponseModel<string>() { Status = true, Message = "Note is Stored in trash " });
-        //            }
-        //            else
-        //            {
-        //                return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Invalid Id " });
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
-        //        }
-        //    }
-        
+                string resultMessage = await this.notesManager.AddColor(notesId,color);
+                if (resultMessage == ("Color Added Successfuly"))
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
     }
 }

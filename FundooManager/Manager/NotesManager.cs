@@ -29,11 +29,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public Task<bool> NotetoTrash(int noteID)
+        public Task<bool> Deletenote(int noteID)
         {
             try
             {
-                var result= notesrepositary.NotetoTrash(noteID);
+                var result= notesrepositary.Deletenote(noteID);
                 return result;
             }
             catch (Exception ex)
@@ -60,18 +60,6 @@ namespace FundooManager.Manager
             try
             {
                 return this.notesrepositary.UpdateNote(updatenotes);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Task<string> Delete(int noteId)
-        {
-            try
-            {
-                return this.notesrepositary.Delete(noteId);
             }
             catch (Exception ex)
             {
@@ -107,7 +95,7 @@ namespace FundooManager.Manager
         {
             try
             {
-                return this.notesrepositary.GetArchive(userId);
+                return this.notesrepositary.GetTrash(userId);
             }
             catch (Exception ex)
             {

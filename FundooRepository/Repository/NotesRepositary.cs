@@ -23,9 +23,16 @@ namespace FundooRepository.Repository
         {
             try
             {
-                this.notesContext.Notes.Add(note);
-                await this.notesContext.SaveChangesAsync();
-                return "Note Added Successfully";
+                if (note.Title != null || note.Body != null || note.Reminder != null)
+                {
+                    this.notesContext.Notes.Add(note);
+                    await this.notesContext.SaveChangesAsync();
+                    return "Note Added Successfully";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
             }
             catch (ArgumentNullException ex)
             {
@@ -33,7 +40,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<bool> NotetoTrash(int noteID)
+        public async Task<bool> Deletenote(int noteID)
         {
             try
             {
@@ -106,59 +113,224 @@ namespace FundooRepository.Repository
             }
         }
 
-        public Task<string> Delete(int noteId)
+        public async Task<string> RestoreNote(int noteId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> RestoreNote(int noteId)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData.IsTrash==true)
+                {
+                    userData.IsTrash = false;
+                    await notesContext.SaveChangesAsync();
+                    return "Notes is restored";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public List<NotesModel> GetArchive(int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var Check = this.notesContext.Notes.Any(e => e.UserId == userId);
+                if (Check)
+                {          
+                    var list = this.notesContext.Notes.Where(e => e.UserId == userId && e.IsTrash == false && e.IsArchived == true).ToList();
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public List<NotesModel> GetTrash(int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var Check = this.notesContext.Notes.Any(e => e.UserId == userId && e.IsTrash == true);
+                if (Check)
+                {
+                    var list = this.notesContext.Notes.Where(e => e.UserId == userId &&  e.IsArchived == false).ToList();
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> PinNote(int noteId)
+        public async Task<string> PinNote(int noteId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData != null)
+                {
+                    userData.IsPin = true;
+                    await this.notesContext.SaveChangesAsync();
+                    return "Pin Notes";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> UnPinNote(int noteId)
+        public async Task<string> UnPinNote(int noteId)
         {
-            throw new NotImplementedException();
+            var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+            if (userData != null && userData.IsPin == true)
+            {
+                userData.IsPin = false;
+                await this.notesContext.SaveChangesAsync();
+                return "UnPin the Notes";
+            }
+            else
+            {
+                return "Invalid Id";
+            }
         }
 
-        public Task<string> ArchiveNote(int noteId)
+        public async Task<string> ArchiveNote(int noteId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData != null)
+                {
+                    userData.IsArchived = true;
+                    await notesContext.SaveChangesAsync();
+                    return "Archive Note";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> UnArchiveNote(int noteId)
+        public async Task<string> UnArchiveNote(int noteId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData != null && userData.IsArchived == true)
+                {
+                    userData.IsArchived = false;
+                    await notesContext.SaveChangesAsync();
+                    return "UnArchived Note";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> SetRemainder(int noteId, string Time)
+        public async Task<string> SetRemainder(int noteId, string Time)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if(userData != null)
+                {
+                    userData.Reminder = Time;
+                    await notesContext.SaveChangesAsync();
+                    return "Reminder is sets Successfuly";
+                }
+                else 
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> RemoveRemainder(int noteId)
+        public  async Task<string> RemoveRemainder(int noteId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData != null)
+                {
+                    userData.Reminder = null; ;
+                    this.notesContext.Notes.Update(userData);
+                    await notesContext.SaveChangesAsync();
+                    return "Reminder is removed";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<string> AddColor(int noteId, string color)
+        public async Task<string> AddColor(int noteId, string color)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userData = this.notesContext.Notes.Where(e => e.NoteId == noteId).SingleOrDefault();
+                if (userData != null)
+                {
+                    userData.Color = color;
+                    await notesContext.SaveChangesAsync();
+                    return "Color Added Successfuly";
+                }
+                else
+                {
+                    return "Invalid Id";
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
