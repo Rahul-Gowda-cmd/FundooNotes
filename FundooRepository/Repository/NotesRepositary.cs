@@ -340,7 +340,7 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<string> AddImage(int noteId, int userId, IFormFile image)
+        public async Task<string> AddImage(int noteId, IFormFile image)
         {
             try
             {
@@ -365,14 +365,7 @@ namespace FundooRepository.Repository
                 }
                 else
                 {
-                    NotesModel notes = new NotesModel()
-                    {
-                        UserId = userId,
-                        Image = uploadedImage
-                    };
-                    this.notesContext.Notes.Add(notes);
-                    await this.notesContext.SaveChangesAsync();
-                    return "Image added";
+                    return "Invalid Id";
                 }
             }
             catch (ArgumentNullException ex)

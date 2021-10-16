@@ -28,7 +28,7 @@ namespace FundooManager.Interface
 
         Task<string> AddColor(int noteId, string color);
 
-        Task<string> AddImage(int noteId, int userId, IFormFile image);
+        Task<string> AddImage(int noteId, IFormFile image);
         Task<string> RemoveImage(int noteId);
 
     }

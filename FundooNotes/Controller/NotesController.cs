@@ -335,11 +335,11 @@ namespace FundooNotes.Controller
 
         [HttpPut]
         [Route("api/addImage")]
-        public async Task<IActionResult> AddImage(int noteId, int userId, IFormFile image)
+        public async Task<IActionResult> AddImage(int noteId, IFormFile image)
         {
             try
             {
-                string resultMessage = await this.notesManager.AddImage(noteId, userId, image);
+                string resultMessage = await this.notesManager.AddImage(noteId, image);
                 if (resultMessage == "Image added")
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });

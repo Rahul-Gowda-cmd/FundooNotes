@@ -188,11 +188,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public Task<string> AddImage(int noteId, int userId, IFormFile image)
+        public Task<string> AddImage(int noteId, IFormFile image)
         {
             try
             {
-                return this.notesrepositary.AddImage(noteId, userId, image);
+                return this.notesrepositary.AddImage(noteId, image);
             }
             catch (Exception ex)
             {
