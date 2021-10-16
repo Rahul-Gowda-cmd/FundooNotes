@@ -1,6 +1,7 @@
 ﻿using FundooManager.Interface;
 using FundooModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controller
 {
-    //[Authorize]
+    [Authorize]
     public class NotesController : ControllerBase
     {
         private readonly INotesManager notesManager;
@@ -329,6 +330,46 @@ namespace FundooNotes.Controller
             catch (Exception ex)
             {
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/addImage")]
+        public async Task<IActionResult> AddImage(int noteId, int userId, IFormFile image)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.AddImage(noteId, userId, image);
+                if (resultMessage == "Image added")
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+
+                return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = true, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/removeImage")]
+        public async Task<IActionResult> RemoveImage(int noteId)
+        {
+            try
+            {
+                string resultMessage = await this.notesManager.RemoveImage(noteId);
+                if (resultMessage == "Image removed")
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
+                }
+
+                return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = true, Message = ex.Message });
             }
         }
     }

@@ -2,6 +2,7 @@
 using FundooModels;
 using FundooRepository.Interface;
 using FundooRepository.Repository;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -180,6 +181,30 @@ namespace FundooManager.Manager
             try
             {
                 return this.notesrepositary.AddColor(noteId,color);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> AddImage(int noteId, int userId, IFormFile image)
+        {
+            try
+            {
+                return this.notesrepositary.AddImage(noteId, userId, image);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> RemoveImage(int noteId)
+        {
+            try
+            {
+                return this.notesrepositary.RemoveImage(noteId);
             }
             catch (Exception ex)
             {

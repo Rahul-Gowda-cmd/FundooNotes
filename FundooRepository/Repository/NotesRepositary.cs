@@ -1,7 +1,11 @@
-﻿using FundooModels;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using FundooModels;
 using FundooRepository.Context;
 using FundooRepository.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +18,12 @@ namespace FundooRepository.Repository
     {
         private readonly UserContext notesContext;
 
-        public NotesRepositary( UserContext notesContext)
+        private readonly IConfiguration Configuration;
+
+        public NotesRepositary( UserContext notesContext, IConfiguration Configuration)
         {
             this.notesContext = notesContext;
+            this.Configuration = Configuration;
         }
 
         public async Task<string> AddNotes(NotesModel note)
@@ -330,6 +337,68 @@ namespace FundooRepository.Repository
             catch (Exception e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+        public async Task<string> AddImage(int noteId, int userId, IFormFile image)
+        {
+            try
+            {
+                var userexist = this.notesContext.Notes.Find(noteId);
+                Account account = new Account(
+                        this.Configuration["CloudinaryAccount:CloudName"],
+                        this.Configuration["CloudinaryAccount:APIKey"],
+                        this.Configuration["CloudinaryAccount:APISecret"]);
+                Cloudinary cloudinary = new Cloudinary(account);
+                var uploadFile = new ImageUploadParams()
+                {
+                    File = new FileDescription(image.FileName, image.OpenReadStream())
+                };
+                var uploadResult = cloudinary.Upload(uploadFile);
+                var uploadedImage = uploadResult.Url.ToString();
+                if (userexist != null)
+                {
+                    userexist.Image = uploadedImage;
+                    this.notesContext.Notes.Update(userexist);
+                    await this.notesContext.SaveChangesAsync();
+                    return "Image added";
+                }
+                else
+                {
+                    NotesModel notes = new NotesModel()
+                    {
+                        UserId = userId,
+                        Image = uploadedImage
+                    };
+                    this.notesContext.Notes.Add(notes);
+                    await this.notesContext.SaveChangesAsync();
+                    return "Image added";
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> RemoveImage(int noteId)
+        {
+            try
+            {
+                var userexist = this.notesContext.Notes.Find(noteId);
+                if (userexist != null)
+                {
+                    userexist.Image = null;
+                    this.notesContext.Notes.Update(userexist);
+                    await this.notesContext.SaveChangesAsync();
+                    return "Image removed";
+                }
+
+                return "Invalid Id";
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
