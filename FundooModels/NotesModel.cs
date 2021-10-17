@@ -15,6 +15,7 @@ namespace FundooModels
         [ForeignKey("UserModel")]
         public int UserId { get; set; }
         public virtual UserModel UserModel{get; set;}
+
         public string Title { get; set; }
         public string Body { get; set; }
         public string Reminder { get; set; }
