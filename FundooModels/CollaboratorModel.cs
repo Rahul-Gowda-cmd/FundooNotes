@@ -17,6 +17,11 @@ namespace FundooModels
 
         [Required]
         [RegularExpression(@"^[A-Za-z0-9]+([\.+\-_][A-Za-z0-9]+)*@[a-zA-Z0-9]+\.?[A-Za-z]+\.?[A-Za-z]{2,}$", ErrorMessage = "Email is not valid, Enter valid Email")]
-        public string CollaboratorEmail { get; set; }
+        public string SenderEmail { get; set; }
+
+        [Required]
+        [RegularExpression(@"^[A-Za-z0-9]+([\.+\-_][A-Za-z0-9]+)*@[a-zA-Z0-9]+\.?[A-Za-z]+\.?[A-Za-z]{2,}$", ErrorMessage = "Email is not valid, Enter valid Email")]
+        public string ReciverEmail { get; set; }
+
     }
 }

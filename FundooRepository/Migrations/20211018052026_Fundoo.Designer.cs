@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundooRepository.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20211013061844_Users")]
-    partial class Users
+    [Migration("20211018052026_Fundoo")]
+    partial class Fundoo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,31 @@ namespace FundooRepository.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FundooModels.CollaboratorModel", b =>
+                {
+                    b.Property<int>("CollaboratorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("NoteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReciverEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CollaboratorId");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("Collaboratores");
+                });
 
             modelBuilder.Entity("FundooModels.NotesModel", b =>
                 {
@@ -87,6 +112,15 @@ namespace FundooRepository.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FundooModels.CollaboratorModel", b =>
+                {
+                    b.HasOne("FundooModels.NotesModel", "NotesModel")
+                        .WithMany()
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FundooModels.NotesModel", b =>

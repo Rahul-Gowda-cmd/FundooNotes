@@ -2,7 +2,7 @@
 
 namespace FundooRepository.Migrations
 {
-    public partial class Users : Migration
+    public partial class Fundoo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,6 +49,32 @@ namespace FundooRepository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Collaboratores",
+                columns: table => new
+                {
+                    CollaboratorId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NoteId = table.Column<int>(nullable: false),
+                    SenderEmail = table.Column<string>(nullable: false),
+                    ReciverEmail = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collaboratores", x => x.CollaboratorId);
+                    table.ForeignKey(
+                        name: "FK_Collaboratores_Notes_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "Notes",
+                        principalColumn: "NoteId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collaboratores_NoteId",
+                table: "Collaboratores",
+                column: "NoteId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Notes_UserId",
                 table: "Notes",
@@ -57,6 +83,9 @@ namespace FundooRepository.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Collaboratores");
+
             migrationBuilder.DropTable(
                 name: "Notes");
 
