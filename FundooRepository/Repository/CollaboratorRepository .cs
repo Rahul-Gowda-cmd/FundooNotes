@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Repository
 {
@@ -16,7 +17,7 @@ namespace FundooRepository.Repository
         {
             this.CollaboratorContext = CollaboratorContext;
         }
-        public string AddCollaborator(CollaboratorModel collaborator)
+        public async Task<string> AddCollaborator(CollaboratorModel collaborator)
         {
             try
             {
@@ -32,7 +33,7 @@ namespace FundooRepository.Repository
                     if (colExists == null)
                     {
                         this.CollaboratorContext.Add(collaborator);
-                        this.CollaboratorContext.SaveChanges();
+                        await this.CollaboratorContext.SaveChangesAsync();
                         message = "Collaborator Added!";
                     }
                     else
@@ -45,6 +46,47 @@ namespace FundooRepository.Repository
             catch (ArgumentNullException ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public List<CollaboratorModel> GetCollaborator(int noteId)
+        {
+            try
+            {
+                var Check = this.CollaboratorContext.Collaboratores.Any(e => e.NoteId == noteId);
+                if (Check)
+                {
+                    var list = this.CollaboratorContext.Collaboratores.Where(e => e.NoteId == noteId && e.ReciverEmail != null).ToList();
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> RemoveCollaborator(int CollaboratorId)
+        {
+            try
+            {
+                var receiverEmailExist = this.CollaboratorContext.Collaboratores.Where(x => x.CollaboratorId == CollaboratorId).SingleOrDefault();
+                if (receiverEmailExist != null)
+                {
+                    this.CollaboratorContext.Collaboratores.Remove(receiverEmailExist);
+                    await this.CollaboratorContext.SaveChangesAsync();
+                    return "Collaborator Removed Successfully";
+                }
+                return "Invalid CollaboratorId";
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
             }
         }
     }

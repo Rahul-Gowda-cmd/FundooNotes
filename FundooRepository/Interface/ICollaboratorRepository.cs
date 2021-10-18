@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooRepository.Interface
 {
     public interface ICollaboratorRepository
     {
-        string AddCollaborator(CollaboratorModel collaborator);
+        Task<string> AddCollaborator(CollaboratorModel collaborator);
+        Task<string> RemoveCollaborator(int CollaboratorId);
+        List<CollaboratorModel> GetCollaborator(int noteId);
     }
 }

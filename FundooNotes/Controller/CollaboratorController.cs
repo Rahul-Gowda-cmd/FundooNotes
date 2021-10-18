@@ -21,14 +21,56 @@ namespace FundooNotes.Controller
 
         [HttpPost]
         [Route("api/addCollaborator")]
-        public IActionResult AddCollaborator([FromBody] CollaboratorModel collaboratorModel)
+        public async Task<IActionResult> AddCollaborator([FromBody] CollaboratorModel collaboratorModel)
         {
             try
             {
-                string result = this.collaboratorManager.AddCollaborator(collaboratorModel);
+                string result =await this.collaboratorManager.AddCollaborator(collaboratorModel);
                 if (result == "Collaborator Added!")
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = collaboratorModel.ReciverEmail });
+                }
+
+                return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/getcollaboratornotes")]
+        public IActionResult GetCollaborator(int noteId)
+        {
+            try
+            {
+                List<CollaboratorModel> data = this.collaboratorManager.GetCollaborator(noteId);
+                if (data != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Get Collaborator Notes Successfull", Data = data });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = "Get Notes Failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("api/RemoveCollaborator")]
+        public async Task<IActionResult> RemoveCollaborator(int CollaboratorId)
+        {
+            try
+            {
+                string result = await this.collaboratorManager.RemoveCollaborator(CollaboratorId);
+                if (result == "Collaborator Removed Successfully")
+                {
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
                 }
 
                 return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });

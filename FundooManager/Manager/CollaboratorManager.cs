@@ -4,6 +4,7 @@ using FundooRepository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooManager.Manager
 {
@@ -15,11 +16,35 @@ namespace FundooManager.Manager
             this.CollaboratorRepositary = CollaboratorRepositary;
 
         }
-        public string AddCollaborator(CollaboratorModel collaborator)
+        public Task<string> AddCollaborator(CollaboratorModel collaborator)
         {
             try
             {
                 return this.CollaboratorRepositary.AddCollaborator(collaborator);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<CollaboratorModel> GetCollaborator(int noteId)
+        {
+            try
+            {
+                return this.CollaboratorRepositary.GetCollaborator(noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Task<string> RemoveCollaborator(int CollaboratorId)
+        {
+            try
+            {
+                return this.CollaboratorRepositary.RemoveCollaborator(CollaboratorId);
             }
             catch (Exception ex)
             {
