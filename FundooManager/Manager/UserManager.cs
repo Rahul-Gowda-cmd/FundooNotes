@@ -1,13 +1,18 @@
-﻿using FundooManager.Interface;
-using FundooModels;
-using FundooRepository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CollaboratorManager.cs" company="Bridgelabz">
+//   Copyright © 2021 Company="BridgeLabz"
+// </copyright>
+// <creator name="Rahul prabu"/>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace FundooManager.Manager
 {
+    using FundooManager.Interface;
+    using FundooModels;
+    using FundooRepository.Interface;
+    using System;
+    using System.Threading.Tasks;
+
     public class UserManager : IUserManager
     {
         private readonly IUserRepository repository;

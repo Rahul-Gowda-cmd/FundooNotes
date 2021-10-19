@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controller
 {
-    //[Authorize]
+    [Authorize]
     public class CollaboratorController : ControllerBase
     {
         private readonly ICollaboratorManager collaboratorManager;

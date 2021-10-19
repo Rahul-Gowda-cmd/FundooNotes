@@ -4,6 +4,7 @@ using FundooRepository.Context;
 using FundooRepository.Interface;
 using FundooRepository.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ namespace FundooNotes.Controller
     {
         private readonly IUserManager manager;
 
-        public UserController(IUserManager manager)
+        private readonly ILogger<UserController> logger;
+
+        public UserController(IUserManager manager, ILogger<UserController> logger)
         {
             this.manager = manager;
-            
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -29,18 +32,22 @@ namespace FundooNotes.Controller
         {
             try
             {
+                this.logger.LogInformation(user.FirstName + " " + user.LastName + " is trying to register");
                 string resultMessage = await this.manager.Register(user);
                 if (resultMessage.Equals("Registration Successfull"))
                 {
+                    this.logger.LogInformation(user.FirstName + " " + user.LastName + " " + resultMessage);
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
                 }
                 else
                 {
+                    this.logger.LogWarning(user.FirstName + " " + user.LastName + " " + resultMessage);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
             }
             catch (Exception ex)
             {
+                this.logger.LogInformation("Exception occured while using register " + ex.Message);
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
@@ -52,9 +59,12 @@ namespace FundooNotes.Controller
         {
             try
             {
+                this.logger.LogInformation(userlogin.Email + " is trying to Login");
                 string resultMessage = this.manager.Login(userlogin);
+                string tokenString = this.manager.GenerateToken(userlogin.Email);
                 if (resultMessage.Equals("Login Successfull"))
                 {
+                    this.logger.LogInformation(userlogin.Email + " logged in successfully and the token generated is "+ tokenString);
                     ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
                     IDatabase database = connectionMultiplexer.GetDatabase();
                     string firstname = database.StringGet("FirstName");
@@ -70,21 +80,24 @@ namespace FundooNotes.Controller
                     };
                     //    var user = this.userContext.Users.SingleOrDefault(x => x.Email == userlogin.Email);
                     //    user.Password = null;
-                    string tokenString = this.manager.GenerateToken(userlogin.Email);
+                    
                     return this.Ok(new { Status = true, Message = resultMessage, Data = user, tokenString });
                 }
                 else if (resultMessage.Equals("Wrong Password"))
                 {
+                    this.logger.LogWarning(userlogin.Email + " " + resultMessage);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
                 else
                 {
+                    this.logger.LogError(userlogin.Email + " " + resultMessage);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
             
             }
             catch (Exception ex)
             {
+                this.logger.LogInformation("Exception occured while logging in " + ex.Message);
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
@@ -95,18 +108,22 @@ namespace FundooNotes.Controller
         {
             try
             {
+                this.logger.LogInformation(email + "is using forgot password");
                 string resultMessage = this.manager.ForgotPassword(email);
                 if (resultMessage.Equals("Check your Email"))
                 {
+                    this.logger.LogInformation(resultMessage);
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage});
                 }
                 else
                 {
+                    this.logger.LogError(resultMessage);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = resultMessage });
                 }
             }
             catch (Exception ex)
             {
+                this.logger.LogInformation("Exception occured while using forgot password " + ex.Message);
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }
@@ -117,18 +134,22 @@ namespace FundooNotes.Controller
         {
             try
             {
+                this.logger.LogInformation(resetpassword.Email + "is using reset password");
                 string message =await this.manager.ResetPassword(resetpassword);
                 if (message.Equals("Password Reset Successfull"))
                 {
+                    this.logger.LogInformation("Password reseted Successfully for " + resetpassword.Email);
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = message });
                 }
                 else
                 {
+                    this.logger.LogError(message);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = message });
                 }
             }
             catch (Exception ex)
             {
+                this.logger.LogInformation("Exception occured while using reset password " + ex.Message);
                 return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
             }
         }

@@ -1,5 +1,6 @@
 ﻿using FundooManager.Interface;
 using FundooModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controller
 {
-    //[Authorize]
+    [Authorize]
     public class LabelController : ControllerBase
     {
         private readonly ILabelManager manager;

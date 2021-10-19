@@ -1,23 +1,45 @@
-﻿using FundooManager.Interface;
-using FundooModels;
-using FundooRepository.Interface;
-using FundooRepository.Repository;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CollaboratorManager.cs" company="Bridgelabz">
+//   Copyright © 2021 Company="BridgeLabz"
+// </copyright>
+// <creator name="Rahul prabu"/>
+// --------------------------------------------------------------------------------------------------------------------
 namespace FundooManager.Manager
 {
+    using FundooManager.Interface;
+    using FundooModels;
+    using FundooRepository.Interface;
+    using Microsoft.AspNetCore.Http;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Class NotesManager
+    /// </summary>
+    /// <seealso cref="FundooManager.Interface.INotesManager" />
     public class NotesManager : INotesManager
     {
+        /// <summary>
+        /// The notesrepositary
+        /// </summary>
         private readonly INotesRepositary notesrepositary;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotesManager"/> class.
+        /// </summary>
+        /// <param name="notesrepositary">The notesrepositary.</param>
         public NotesManager(INotesRepositary notesrepositary)
         {
             this.notesrepositary = notesrepositary;
         }
 
+        /// <summary>
+        /// Adds the notes.
+        /// </summary>
+        /// <param name="note">The note.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> AddNotes(NotesModel note)
         {
             try
@@ -30,6 +52,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Deletenotes the specified note identifier.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns>
+        /// returns a string on successful delete
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<bool> Deletenote(int noteID)
         {
             try
@@ -43,6 +73,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Gets the notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// Returns a lit of retrieved notes
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<NotesModel> GetNotes(int userId)
         {
 
@@ -56,6 +94,12 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Updates the note.
+        /// </summary>
+        /// <param name="updatenotes">The updatenotes.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> UpdateNote(NotesModel updatenotes)
         {
             try
@@ -68,6 +112,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Restores the note.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string on successful restore
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> RestoreNote(int noteId)
         {
             try
@@ -80,6 +132,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Gets the archive.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// returns list as result
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<NotesModel> GetArchive(int userId)
         {
             try
@@ -92,6 +152,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Gets the trash.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// returns list as result
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<NotesModel> GetTrash(int userId)
         {
             try
@@ -104,6 +172,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Pins the note.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string after updating pin
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> PinNote(int noteId)
         {
             try
@@ -116,6 +192,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Uns the pin note.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string after remove pin
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> UnPinNote(int noteId)
         {
             try
@@ -128,6 +212,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Archives the note.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string after Archive note
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> ArchiveNote(int noteId)
         {
             try
@@ -140,6 +232,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Uns the archive note.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string after UnArchivenote
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> UnArchiveNote(int noteId)
         {
             try
@@ -152,6 +252,15 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Sets the remainder.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="Time">The time.</param>
+        /// <returns>
+        /// returns a string after Set Time
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> SetRemainder(int noteId, string Time)
         {
             try
@@ -164,6 +273,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Removes the remainder.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns a string after Remove Reminder
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> RemoveRemainder(int noteId)
         {
             try
@@ -176,6 +293,15 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Adds the color.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="color">The color.</param>
+        /// <returns>
+        /// returns string on successful update of color
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> AddColor(int noteId, string color)
         {
             try
@@ -188,6 +314,15 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Adds the image.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="image">The image.</param>
+        /// <returns>
+        /// returns string after successfully adding image
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> AddImage(int noteId, IFormFile image)
         {
             try
@@ -200,6 +335,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Removes the image.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>
+        /// returns string after successfully removing image
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> RemoveImage(int noteId)
         {
             try

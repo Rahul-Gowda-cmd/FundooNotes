@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\HP\.nuget\packages\nlog.config\4.7.11\contentFiles\any\any\NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\HP\.nuget\packages\nlog.config\4.7.11\contentFiles\any\any\NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
@@ -12,6 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.50" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
@@ -19,6 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\FundooManager\FundooManager.csproj" />
     <ProjectReference Include="..\FundooModels\FundooModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Program.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
