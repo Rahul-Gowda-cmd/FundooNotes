@@ -28,10 +28,16 @@ namespace FundooNotes.Controller
                 string result =await this.collaboratorManager.AddCollaborator(collaboratorModel);
                 if (result == "Collaborator Added!")
                 {
-                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result, Data = collaboratorModel.ReciverEmail });
+                    return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
                 }
-
-                return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                else if (result == "This email already exists")
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
+                else
+                {
+                    return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
+                }
             }
             catch (Exception ex)
             {

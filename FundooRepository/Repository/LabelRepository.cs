@@ -80,12 +80,13 @@ namespace FundooRepository.Repository
             }
         }
 
-        public async Task<string> DeleteLabel(int userId, string labelName)
+        public async Task<string> DeleteLabel(int labelId)
         {
             try
             {
-                var exists = this.repositaryContext.Labels.Where(x => x.LabelName == labelName && x.UserId == userId).ToList();
-                if (exists.Count > 0)
+                var label = this.repositaryContext.Labels.Where(x => x.LabelId == labelId).SingleOrDefault();
+                var exists = this.repositaryContext.Labels.Where(x => x.LabelName == label.LabelName && x.UserId== label.UserId).ToList();
+                if (exists.Count > 0 )
                 {
                     this.repositaryContext.Labels.RemoveRange(exists);
                     await this.repositaryContext.SaveChangesAsync();
@@ -100,14 +101,15 @@ namespace FundooRepository.Repository
             }
         }
 
-        public List<NotesModel> DisplayNotesBasedOnLabel(int userId, string labelName)
+        public List<NotesModel> GetNotesBasedOnLabel(int labelId)
         {
             try
             {
-                var exists = (from notes in this.repositaryContext.Notes
-                              join label in this.repositaryContext.Labels
-                              on notes.NoteId equals label.NoteId
-                              where userId == label.UserId && label.LabelName == labelName
+                var existdata = this.repositaryContext.Labels.Where(x => x.LabelId == labelId).SingleOrDefault();
+                var exists = (from label in this.repositaryContext.Labels
+                              join notes in this.repositaryContext.Notes
+                              on label.NoteId equals notes.NoteId
+                              where label.UserId == existdata.UserId && label.LabelName == existdata.LabelName
                               select notes).ToList();
                 if (exists.Count > 0)
                 {
@@ -126,25 +128,16 @@ namespace FundooRepository.Repository
         {
             try
             {
-                string message = "Label not present";
                 var exist = this.repositaryContext.Labels.Where(x => x.LabelId == labelModel.LabelId).Select(x => x.LabelName).SingleOrDefault();
                 var existOldLabel = this.repositaryContext.Labels.Where(x => x.LabelName == exist && x.UserId == labelModel.UserId).ToList();
-                var labelExists = this.repositaryContext.Labels.Where(x => x.LabelName == labelModel.LabelName && x.UserId == labelModel.UserId && x.NoteId == null).SingleOrDefault();
                 if (existOldLabel.Count > 0)
-                {
-                    message = "Updated Label";
-                    if (labelExists != null)
-                    {
-                        this.repositaryContext.Labels.Remove(labelExists);
-                        await this.repositaryContext.SaveChangesAsync();
-                        message = "Exist label is deleted";
-                    }
-
+                {                   
                     existOldLabel.ForEach(x => x.LabelName = labelModel.LabelName);
                     this.repositaryContext.Labels.UpdateRange(existOldLabel);
-                    this.repositaryContext.SaveChanges();
+                    await this.repositaryContext.SaveChangesAsync();
+                    return "Label is Updated";
                 }
-                return message;
+                return "Label doesnot Exist";
             }
             catch (ArgumentNullException ex)
             {
@@ -152,14 +145,13 @@ namespace FundooRepository.Repository
             }
         }
 
-        public List<string> GetLabel(int userId)
+        public List<LabelModel> GetLabel(int userId)
         {
             try
             {
-                var Check = this.repositaryContext.Labels.Any(e => e.UserId == userId);
-                if (Check)
-                {
-                    var list = this.repositaryContext.Labels.Where(e => e.UserId == userId).Select(x => x.LabelName).Distinct().ToList();
+                var list = this.repositaryContext.Labels.Where(e => e.UserId == userId).Distinct().ToList();
+                if (list.Count > 0)
+                { 
                     return list;
                 }
                 else
@@ -177,10 +169,9 @@ namespace FundooRepository.Repository
         {
             try
             {
-                var Check = this.repositaryContext.Labels.Any(e => e.NoteId == notesId);
-                if (Check)
-                {
-                    var list = this.repositaryContext.Labels.Where(e => e.NoteId == notesId).ToList();
+                var list = this.repositaryContext.Labels.Where(e => e.NoteId == notesId).ToList();
+                if (list.Count > 0)
+                {      
                     return list;
                 }
                 else

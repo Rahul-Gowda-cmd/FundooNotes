@@ -52,11 +52,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public Task<string> DeleteLabel(int userId, string labelName)
+        public Task<string> DeleteLabel(int labelId)
         {
             try
             {
-                return this.repositary.DeleteLabel(userId, labelName);
+                return this.repositary.DeleteLabel(labelId);
             }
             catch (Exception ex)
             {
@@ -64,11 +64,11 @@ namespace FundooManager.Manager
             }
         }
 
-        public List<NotesModel> DisplayNotesBasedOnLabel(int userId, string labelName)
+        public List<NotesModel> GetNotesBasedOnLabel(int labelId)
         {
             try
             {
-                return this.repositary.DisplayNotesBasedOnLabel(userId, labelName);
+                return this.repositary.GetNotesBasedOnLabel(labelId);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace FundooManager.Manager
             }
         }
 
-        public List<string> GetLabel(int userId)
+        public List<LabelModel> GetLabel(int userId)
         {
             try
             {

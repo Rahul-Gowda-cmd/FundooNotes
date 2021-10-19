@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controller
 {
+    //[Authorize]
     public class LabelController : ControllerBase
     {
         private readonly ILabelManager manager;
@@ -78,11 +79,11 @@ namespace FundooNotes.Controller
 
         [HttpDelete]
         [Route("api/DeleteLabel")]
-        public async Task<IActionResult> DeleteLabel(int userId, string labelName)
+        public async Task<IActionResult> DeleteLabel(int labelId)
         {
             try
             {
-                string result = await this.manager.DeleteLabel(userId, labelName);
+                var result = await this.manager.DeleteLabel(labelId);
                 if (result == "Deleted Label")
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
@@ -96,14 +97,14 @@ namespace FundooNotes.Controller
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("api/EditLabel")]
         public async Task<IActionResult> EditLabel([FromBody]LabelModel labelModel)
         {
             try
             {
                 string result = await this.manager.EditLabel(labelModel);
-                if (result == "Updated Label")
+                if (result == "Label is Updated")
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
                 }
@@ -118,15 +119,15 @@ namespace FundooNotes.Controller
 
 
         [HttpGet]
-        [Route("api/DisplayNotesBasedOnLabel")]
-        public IActionResult DisplayNotesBasedOnLabel(int userId, string labelName)
+        [Route("api/GetNotesBasedOnLabel")]
+        public IActionResult GetNotesBasedOnLabel(int labelId)
         {
             try
             {
-                var data = this.manager.DisplayNotesBasedOnLabel(userId, labelName);
+                var data = this.manager.GetNotesBasedOnLabel(labelId);
                 if (data != null)
                 {
-                    return this.Ok(new { Status = true, Message = "Display Notes Based on Table", Data = data });
+                    return this.Ok(new { Status = true, Message = "Display Notes Based on Lable", Data = data });
                 }
                 else
                 {
@@ -139,7 +140,7 @@ namespace FundooNotes.Controller
             }
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("api/GetLabelByNote")]
         public IActionResult GetLabelByNoteId(int notesId)
         {
@@ -159,7 +160,7 @@ namespace FundooNotes.Controller
             }
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("api/GetLabel")]
         public IActionResult GetLabel(int userId)
         {

@@ -21,7 +21,6 @@ namespace FundooRepository.Repository
         {
             try
             {
-                string message = string.Empty;
                 var owner = (from user in this.CollaboratorContext.Users
                              join notes in this.CollaboratorContext.Notes
                              on user.UserId equals notes.UserId
@@ -29,19 +28,19 @@ namespace FundooRepository.Repository
                              select new { userId = user.UserId }).SingleOrDefault();
                 if (owner != null)
                 {
-                    var colExists = this.CollaboratorContext.Collaboratores.Where(x => x.ReciverEmail == collaborator.ReciverEmail).SingleOrDefault();
+                    var colExists = this.CollaboratorContext.Collaboratores.Where(x => x.ReciverEmail == collaborator.ReciverEmail && x.NoteId == collaborator.NoteId).SingleOrDefault();
                     if (colExists == null)
                     {
                         this.CollaboratorContext.Add(collaborator);
                         await this.CollaboratorContext.SaveChangesAsync();
-                        message = "Collaborator Added!";
+                        return "Collaborator Added!";
                     }
                     else
                     {
-                        message = "This email already exists";
+                        return "This email already exists";
                     }
                 }
-                return message= "This email Not exists in UserModel";
+                return "Sender Email does not Match";
             }
             catch (ArgumentNullException ex)
             {
