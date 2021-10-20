@@ -1,25 +1,47 @@
-﻿using FundooManager.Interface;
-using FundooModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+//   Copyright © 2021 Company="BridgeLabz"
+// </copyright>
+// <creator name="Rahul prabu"/>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace FundooNotes.Controller
 {
+    using FundooManager.Interface;
+    using FundooModels;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// class NotesController
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Authorize]
     public class NotesController : ControllerBase
     {
+        /// <summary>
+        /// The notes manager
+        /// </summary>
         private readonly INotesManager notesManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotesController"/> class.
+        /// </summary>
+        /// <param name="notesManager">The notes manager.</param>
         public NotesController(INotesManager notesManager)
         {
             this.notesManager = notesManager;
         }
 
+        /// <summary>
+        /// Adds the notes.
+        /// </summary>
+        /// <param name="note">The note.</param>
+        /// <returns>return Adding new notes</returns>
         [HttpPost]
         [Route("api/addNotes")]
         public async Task<IActionResult> AddNotes([FromBody] NotesModel note)
@@ -42,6 +64,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Gets the notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>return getting notes</returns>
         [HttpGet]
         [Route("api/GetNotes")]
         public IActionResult GetNotes(int userId)
@@ -64,6 +91,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Updates the note.
+        /// </summary>
+        /// <param name="updateNote">The update note.</param>
+        /// <returns>return updating existing note</returns>
         [HttpPut]
         [Route("api/UpdateNotes")]
         public async Task<IActionResult> UpdateNote([FromBody]NotesModel updateNote)
@@ -86,6 +118,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Deletenotes the specified notes identifier.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return deleting note</returns>
         [HttpPost]
         [Route("api/Deletenote")]
         public async Task<IActionResult> Deletenote(int notesId)
@@ -108,6 +145,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Restores the note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return restoring note from Trash</returns>
         [HttpPost]
         [Route("api/RestoreNote")]
         public async Task<IActionResult> RestoreNote(int notesId)
@@ -130,6 +172,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Gets the archive.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return getting Archive files</returns>
         [HttpGet]
         [Route("api/GetArchive")]
         public IActionResult GetArchive(int notesId)
@@ -153,6 +200,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Gets the trash.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>return getting Trash files</returns>
         [HttpGet]
         [Route("api/GetTrash")]
         public IActionResult GetTrash(int userId)
@@ -175,7 +227,11 @@ namespace FundooNotes.Controller
             }
         }
 
-
+        /// <summary>
+        /// Pins the note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return adding pin to notes</returns>
         [HttpPost]
         [Route("api/PinNote")]
         public async Task<IActionResult> PinNote(int notesId)
@@ -198,6 +254,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Uns the pin note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return remove pin from notes</returns>
         [HttpPost]
         [Route("api/UnPinNote")]
         public async Task<IActionResult> UnPinNote(int notesId)
@@ -220,6 +281,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Archives the note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return adding archive notes</returns>
         [HttpPost]
         [Route("api/ArchiveNote")]
         public async Task<IActionResult> ArchiveNote(int notesId)
@@ -242,6 +308,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Uns the archive note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return removes Archive from notes</returns>
         [HttpPost]
         [Route("api/UnArchiveNote")]
         public async Task<IActionResult> UnArchiveNote(int notesId)
@@ -264,6 +335,12 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Sets the remainder.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <param name="Time">The time.</param>
+        /// <returns>return adding remainder to note</returns>
         [HttpPost]
         [Route("api/SetRemainder")]
         public async Task<IActionResult> SetRemainder(int notesId, string Time)
@@ -287,6 +364,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Removes the remainder.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>return remove remainder from note</returns>
         [HttpPost]
         [Route("api/RemoveRemainder")]
         public async Task<IActionResult> RemoveRemainder(int notesId)
@@ -310,6 +392,12 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Adds the color.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <param name="color">The color.</param>
+        /// <returns>return adding color to note</returns>
         [HttpPost]
         [Route("api/AddColor")]
         public async Task<IActionResult> AddColor(int notesId, string color)
@@ -333,6 +421,12 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Adds the image.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="image">The image.</param>
+        /// <returns>return adding image to note</returns>
         [HttpPut]
         [Route("api/addImage")]
         public async Task<IActionResult> AddImage(int noteId, IFormFile image)
@@ -353,6 +447,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Removes the image.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <returns>return remove image from note</returns>
         [HttpPut]
         [Route("api/removeImage")]
         public async Task<IActionResult> RemoveImage(int noteId)

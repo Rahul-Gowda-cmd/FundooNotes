@@ -1,31 +1,52 @@
-﻿using FundooManager.Interface;
-using FundooModels;
-using FundooRepository.Context;
-using FundooRepository.Interface;
-using FundooRepository.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+//   Copyright © 2021 Company="BridgeLabz"
+// </copyright>
+// <creator name="Rahul prabu"/>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace FundooNotes.Controller
 {
-   
+    using FundooManager.Interface;
+    using FundooModels;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using StackExchange.Redis;
+    using System;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// class UserController
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// The manager
+        /// </summary>
         private readonly IUserManager manager;
 
+        /// <summary>
+        /// The logger
+        /// </summary>
         private readonly ILogger<UserController> logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
         public UserController(IUserManager manager, ILogger<UserController> logger)
         {
             this.manager = manager;
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Registers the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>return register page</returns>
         [HttpPost]
         [Route("api/register")]
         public async Task<IActionResult> Register([FromBody] UserModel user)
@@ -52,7 +73,11 @@ namespace FundooNotes.Controller
             }
         }
 
-
+        /// <summary>
+        /// Logins the specified userlogin.
+        /// </summary>
+        /// <param name="userlogin">The userlogin.</param>
+        /// <returns>return Login Page</returns>
         [HttpPost]
         [Route("api/login")]
         public IActionResult Login([FromBody] LoginModel userlogin)
@@ -102,6 +127,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Forgots the password.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns>return Forgetpassword using email</returns>
         [HttpPost]
         [Route("api/ForgetPassword")]
         public IActionResult ForgotPassword(string email)
@@ -128,6 +158,11 @@ namespace FundooNotes.Controller
             }
         }
 
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="resetpassword">The resetpassword.</param>
+        /// <returns>return Resetpassword using email link</returns>
         [HttpPut]
         [Route("api/resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody] UserModel resetpassword)

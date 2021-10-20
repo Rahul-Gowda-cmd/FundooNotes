@@ -1,22 +1,48 @@
-﻿using FundooModels;
-using FundooRepository.Context;
-using FundooRepository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+//   Copyright © 2021 Company="BridgeLabz"
+// </copyright>
+// <creator name="Rahul prabu"/>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace FundooRepository.Repository
 {
+    using FundooModels;
+    using FundooRepository.Context;
+    using FundooRepository.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// class LabelRepository : ILabelRepository
+    /// </summary>
+    /// <seealso cref="FundooRepository.Interface.ILabelRepository" />
     public class LabelRepository : ILabelRepository
     {
+        /// <summary>
+        /// The repositary context
+        /// </summary>
         private readonly UserContext repositaryContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LabelRepository"/> class.
+        /// </summary>
+        /// <param name="repositaryContext">The repositary context.</param>
         public LabelRepository(UserContext repositaryContext)
         {
             this.repositaryContext = repositaryContext;
         }
+
+        /// <summary>
+        /// Adds the label.
+        /// </summary>
+        /// <param name="labelModel">The label model.</param>
+        /// <returns>
+        /// returns string after successfully adding label without notesId
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<string> AddLabel(LabelModel labelModel)
         {
             try
@@ -37,6 +63,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Adds the notes label.
+        /// </summary>
+        /// <param name="labelModel">The label model.</param>
+        /// <returns>
+        /// returns a string after adding label from notes
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<string> AddNotesLabel(LabelModel labelModel)
         {
             try
@@ -60,6 +94,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Deletes the label from note.
+        /// </summary>
+        /// <param name="labelId">The label identifier.</param>
+        /// <returns>
+        /// returns a string after deleting a label from note
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<string> DeleteLabelFromNote(int labelId)
         {
             try
@@ -80,6 +122,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Deletes the label.
+        /// </summary>
+        /// <param name="labelId">The label identifier.</param>
+        /// <returns>
+        /// returns a string after deleting from home
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<string> DeleteLabel(int labelId)
         {
             try
@@ -101,6 +151,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Gets the notes based on label.
+        /// </summary>
+        /// <param name="labelId">The label identifier.</param>
+        /// <returns>
+        /// returns a list of notes based on labe
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<NotesModel> GetNotesBasedOnLabel(int labelId)
         {
             try
@@ -124,6 +182,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Edits the label.
+        /// </summary>
+        /// <param name="labelModel">The label model.</param>
+        /// <returns>
+        /// returns a string after editing label
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<string> EditLabel(LabelModel labelModel)
         {
             try
@@ -145,11 +211,21 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Gets the label.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// returns a list for getting labels based on userID
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<LabelModel> GetLabel(int userId)
         {
             try
             {
                 var list = this.repositaryContext.Labels.Where(e => e.UserId == userId).Distinct().ToList();
+                //var list= await (from user in repositaryContext.Labels where user.UserId == userId 
+                //                 && user.NoteId == null select user ).ToListAsync();
                 if (list.Count > 0)
                 { 
                     return list;
@@ -165,6 +241,14 @@ namespace FundooRepository.Repository
             }
         }
 
+        /// <summary>
+        /// Gets the label by note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <returns>
+        /// returns a list of label by notes
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public List<LabelModel> GetLabelByNote(int notesId)
         {
             try

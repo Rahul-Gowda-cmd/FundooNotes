@@ -13,15 +13,34 @@ namespace FundooManager.Manager
     using System;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// ClassManager
+    /// </summary>
+    /// <seealso cref="FundooManager.Interface.IUserManager" />
     public class UserManager : IUserManager
     {
+        /// <summary>
+        /// The repository
+        /// </summary>
         private readonly IUserRepository repository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserManager"/> class.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
         public UserManager(IUserRepository repository)
         {
             this.repository = repository;
         }
 
+        /// <summary>
+        /// Registers the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>
+        /// Returns string if Register is successful
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> Register(UserModel user)
         {
             try
@@ -34,6 +53,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Logins the specified userlogin.
+        /// </summary>
+        /// <param name="userlogin">The userlogin.</param>
+        /// <returns>
+        /// returns string if login is successful
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public string Login(LoginModel userlogin)
         {
             try
@@ -46,6 +73,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Forgots the password.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns>
+        /// Returns string if mail sent successful else false
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public string ForgotPassword(string email)
         {
             try
@@ -58,7 +93,14 @@ namespace FundooManager.Manager
             }
         }
 
-
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="resetpassword">The resetpassword.</param>
+        /// <returns>
+        /// Returns true if the password is successfully reset
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public Task<string> ResetPassword(UserModel resetpassword)
         {
             try
@@ -71,6 +113,14 @@ namespace FundooManager.Manager
             }
         }
 
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns>
+        /// Returns the token when user logins
+        /// </returns>
+        /// <exception cref="System.Exception"></exception>
         public string GenerateToken(string email)
         {
             try
