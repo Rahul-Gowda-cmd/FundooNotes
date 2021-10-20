@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="NotesRepositary.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>
@@ -19,6 +19,11 @@ namespace FundooRepository.Repository
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    /// <summary>
+    /// NotesRepositary
+    /// </summary>
+    /// <seealso cref="FundooRepository.Interface.INotesRepositary" />
     public class NotesRepositary : INotesRepositary
     {
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="UserRepository.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>
@@ -23,7 +23,7 @@ namespace FundooRepository.Repository
     using System.Threading.Tasks;
 
     /// <summary>
-    /// class UserRepository : IUserRepository
+    /// class UserRepository 
     /// </summary>
     /// <seealso cref="FundooRepository.Interface.IUserRepository" />
     public class UserRepository : IUserRepository

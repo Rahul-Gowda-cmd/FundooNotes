@@ -1,6 +1,6 @@
 ﻿using System;
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="UserModel.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>

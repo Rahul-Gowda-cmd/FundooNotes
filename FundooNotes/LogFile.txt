@@ -22,3 +22,27 @@
 2021-10-19 23:52:56.7084 Info Adding target FileTarget(Name=ownFile-web)
 2021-10-19 23:52:56.7084 Info Adding target ConsoleTarget(Name=lifetimeConsole)
 2021-10-19 23:52:56.8443 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=66, FilePath=E:\CustomFellowshipProgram\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\nlog.config
+2021-10-20 22:15:57.3638 Info Message Template Auto Format enabled
+2021-10-20 22:15:57.8987 Info Loading assembly: NLog.Web.AspNetCore
+2021-10-20 22:15:58.5458 Info Adding target FileTarget(Name=allfile)
+2021-10-20 22:15:58.6542 Info Adding target FileTarget(Name=ownFile-web)
+2021-10-20 22:15:58.6542 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2021-10-20 22:15:59.1445 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=66, FilePath=E:\CustomFellowshipProgram\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\nlog.config
+2021-10-20 22:34:58.7809 Info Message Template Auto Format enabled
+2021-10-20 22:34:58.8740 Info Loading assembly: NLog.Web.AspNetCore
+2021-10-20 22:34:59.0419 Info Adding target FileTarget(Name=allfile)
+2021-10-20 22:34:59.0876 Info Adding target FileTarget(Name=ownFile-web)
+2021-10-20 22:34:59.0876 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2021-10-20 22:34:59.2093 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=66, FilePath=E:\CustomFellowshipProgram\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\nlog.config
+2021-10-20 22:37:56.5944 Info Message Template Auto Format enabled
+2021-10-20 22:37:56.6056 Info Loading assembly: NLog.Web.AspNetCore
+2021-10-20 22:37:56.6492 Info Adding target FileTarget(Name=allfile)
+2021-10-20 22:37:56.6492 Info Adding target FileTarget(Name=ownFile-web)
+2021-10-20 22:37:56.6598 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2021-10-20 22:37:56.6936 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=66, FilePath=E:\CustomFellowshipProgram\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\nlog.config
+2021-10-20 22:43:13.0201 Info Message Template Auto Format enabled
+2021-10-20 22:43:13.0420 Info Loading assembly: NLog.Web.AspNetCore
+2021-10-20 22:43:13.1122 Info Adding target FileTarget(Name=allfile)
+2021-10-20 22:43:13.1212 Info Adding target FileTarget(Name=ownFile-web)
+2021-10-20 22:43:13.1212 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2021-10-20 22:43:13.1662 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=66, FilePath=E:\CustomFellowshipProgram\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\nlog.config

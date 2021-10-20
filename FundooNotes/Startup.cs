@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="Startup.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>
@@ -21,7 +21,12 @@ namespace FundooNotes
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using System;
     using System.Text;
+
+    /// <summary>
+    /// class Startup
+    /// </summary>
     public class Startup
     {
         /// <summary>
@@ -50,6 +55,9 @@ namespace FundooNotes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);
+            });
             services.AddDbContextPool<UserContext>(
                 options => options.UseSqlServer(this.Configuration.GetConnectionString("UserDbConnection")));
 
@@ -127,6 +135,8 @@ namespace FundooNotes
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 

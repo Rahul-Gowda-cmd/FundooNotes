@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="LabelRepository.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>
@@ -16,7 +16,7 @@ namespace FundooRepository.Repository
     using System.Threading.Tasks;
 
     /// <summary>
-    /// class LabelRepository : ILabelRepository
+    /// class LabelRepository 
     /// </summary>
     /// <seealso cref="FundooRepository.Interface.ILabelRepository" />
     public class LabelRepository : ILabelRepository

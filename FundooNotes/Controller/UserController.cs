@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollaboratorManager.cs" company="Bridgelabz">
+// <copyright file="UserController.cs" company="Bridgelabz">
 //   Copyright © 2021 Company="BridgeLabz"
 // </copyright>
 // <creator name="Rahul prabu"/>
@@ -9,6 +9,7 @@ namespace FundooNotes.Controller
 {
     using FundooManager.Interface;
     using FundooModels;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using StackExchange.Redis;
@@ -54,10 +55,13 @@ namespace FundooNotes.Controller
             try
             {
                 this.logger.LogInformation(user.FirstName + " " + user.LastName + " is trying to register");
+                HttpContext.Session.SetString("User Name", user.FirstName + " " + user.LastName);
+                HttpContext.Session.SetString("User Email", user.Email);
                 string resultMessage = await this.manager.Register(user);
                 if (resultMessage.Equals("Registration Successfull"))
                 {
-                    this.logger.LogInformation(user.FirstName + " " + user.LastName + " " + resultMessage);
+                    var username = HttpContext.Session.GetString("User Name");
+                    this.logger.LogInformation("User Name "  + username + resultMessage);
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = resultMessage });
                 }
                 else
